@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Hello World!
-tagline: Supporting tagline
+title: erocci
+tagline: OCCI the erlang way !
 ---
 {% include JB/setup %}
 
