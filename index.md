@@ -32,21 +32,22 @@ designed with simplicity, flexibility and performance in mind.
 You just need to expose an OCCI API with database backend ? Look at the code:
 
 {% highlight erlang linenos %}
-    start() ->
-        application:start(occi),
-	Extensions = {extensions, {[{xml, "schemas/occi-infrastructure.xml"},
-		     		    [
-				      {#occi_cid{scheme=?SCHEME_INFRA, term='compute', class=kind}, "/compute/"},
-				      {#occi_cid{scheme=?SCHEME_INFRA, term='storage', class=kind}, "/storage/"},
-				      {#occi_cid{scheme=?SCHEME_INFRA, term='storagelink', class=kind}, "/storagelink/"},
-				      {#occi_cid{scheme=?SCHEME_INFRA, term='network', class=kind}, "/network/"},
-				      {#occi_cid{scheme=?SCHEME_INFRA, term='networkinterface', class=kind}, "/networkinterface/"},
-				      {#occi_cid{scheme=?SCHEME_NET, term='ipnetwork', class=mixin}, "/ipnetwork/"},
-				      {#occi_cid{scheme=?SCHEME_NET_IF, term='ipnetworkinterface', class=mixin}, "/ipnetworkinterface/"},
-				      {#occi_cid{scheme=?SCHEME_INFRA, term='os_tpl', class=mixin}, "/os_tpl/"},
-				      {#occi_cid{scheme=?SCHEME_INFRA, term='resource_tpl', class=mixin}, "/resource_tpl/"}
-  			      	    ]
-				   }]}},
+start() ->
+  application:start(occi),
+  Extensions = {extensions, {
+                  [{xml, "schemas/occi-infrastructure.xml"}],
+                  [
+                    {#occi_cid{scheme=?SCHEME_INFRA, term='compute', class=kind}, "/compute/"},
+                    {#occi_cid{scheme=?SCHEME_INFRA, term='storage', class=kind}, "/storage/"},
+                    {#occi_cid{scheme=?SCHEME_INFRA, term='storagelink', class=kind}, "/storagelink/"},
+                    {#occi_cid{scheme=?SCHEME_INFRA, term='network', class=kind}, "/network/"},
+                    {#occi_cid{scheme=?SCHEME_INFRA, term='networkinterface', class=kind}, "/networkinterface/"},
+                    {#occi_cid{scheme=?SCHEME_NET, term='ipnetwork', class=mixin}, "/ipnetwork/"},
+                    {#occi_cid{scheme=?SCHEME_NET_IF, term='ipnetworkinterface', class=mixin}, "/ipnetworkinterface/"},
+                    {#occi_cid{scheme=?SCHEME_INFRA, term='os_tpl', class=mixin}, "/os_tpl/"},
+                    {#occi_cid{scheme=?SCHEME_INFRA, term='resource_tpl', class=mixin}, "/resource_tpl/"}
+                  ]
+               }},
 	Backends = {backends, [{mnesia, occi_backend_mnesia, [], "/"}]},
 	Listeners = {listeners, [{http, occi_http, [{port, 8080}]}]},
 	occi:config([Extensions, Backends, Listeners]).
@@ -77,25 +78,3 @@ cluster as on a single machine, handling smoothly all requests your
 audience requires.
 
 Multiple backends are handled in parallel, giving another level of distribution.
-
-## Sample Posts
-
-This blog contains sample posts which help stage pages and blog data.
-When you don't need the samples anymore just delete the `_posts/core-samples` folder.
-
-    $ rm -rf _posts/core-samples
-
-Here's a sample "posts list".
-
-<ul class="posts">
-  {% for post in site.posts %}
-    <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></li>
-  {% endfor %}
-</ul>
-
-## To-Do
-
-This theme is still unfinished. If you'd like to be added as a contributor, [please fork](http://github.com/plusjade/jekyll-bootstrap)!
-We need to clean up the themes, make theme usage guides with theme-specific markup examples.
-
-
