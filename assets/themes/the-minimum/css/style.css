@@ -351,6 +351,10 @@ pre {
   margin-left: 0;
   margin-right: 0;
 }
+.unit-article .carousel ul {
+  width: 31.875em;
+  list-style: none;
+}
 .unit-article p code,
 .unit-article li code {
   margin: 0 2px;
