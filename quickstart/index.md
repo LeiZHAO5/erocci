@@ -73,7 +73,9 @@ code. For the moment, just copy'n'paste.
 
 ### Step 5
 
-Create your OCCI extension file or choose existing one.
+Create your OCCI extension file or choose existing one. XML schema is
+available
+[here](http://github.com/jeanparpaillon/occi-schemas/blob/master/xml/occi.xsd).
 
 `schemas/occi-infrastructure.xml`
 {% highlight xml linenos %}
