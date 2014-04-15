@@ -270,4 +270,8 @@ Test your application:
 curl -v -H 'accept: application/occi+json' http://localhost:8080/-/
 {% endhighlight %}
 
+Have a look at OCCI specifications, especially HTTP rendering, to know
+how to create, retrieve, update or delete resources ([OCCI-wg
+website](http://occi-wg.org/about/specification/))
+
 That's all folks !
