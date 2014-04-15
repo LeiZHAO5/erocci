@@ -16,7 +16,7 @@
 	  <div class="flexslider carousel">
 	    <ul class="slides" >
 	      {% for slides in page.carousel %}
-	      <li><img src="{{ slides.image }}" /></li>
+	      <li><img src='{{ BASE_PATH }}{{ slides.image }}' /></li>
 	      {% endfor %}
 	    </ul>
 	  </div>
