@@ -1,0 +1,13 @@
+*~
+/.rebar/
+/Mnesia.nonode@nohost/
+/deps/
+/doc/
+/ebin/
+/erl_crash.dump
+/include/
+/log/
+/priv/
+/scripts/
+/src/
+/test/
