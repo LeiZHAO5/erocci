@@ -5,8 +5,9 @@ description: "The 'plug and dev' way"
 ---
 {% include JB/setup %}
 
-With the following instructions, you should be able to build your
-first OCCI web service. You don't need to know erlang at this point.
+With the following instructions, you should be able to run your first
+OCCI web service, with Mnesia backend (the erlang distributed
+database). You don't need to know erlang at this point.
 
 ### Step 1
 
@@ -28,56 +29,18 @@ Other erlang dependancies are managed with rebar.
 
 ### Step 2
 
-Create a dir for your application and cd into it:
+Checkout *erocci* code:
 {% highlight sh %}
-mkdir myocci && cd myocci
+git checkout http://github.com/jeanparpaillon/erocci.git
 {% endhighlight %}
 
 ### Step 3
-
-Create a rebar configuration file:
-
-`rebar.config`
-{% highlight erlang linenos %}
-{erl_opts, [{i, "deps/erim/include"}
-	    ,{i, "deps/occi/include"}
-	   ]}.
-
-{deps, [{occi, ".*",
-	 {git, "git://github.com/jeanparpaillon/erocci.git", "master"}}
-       ]}.
-{% endhighlight %}
-
-Create an app file for rebar to understand this is an app.
-
-`src/myocci.app.src`
-{% highlight erlang linenos %}
-{application, myocci,
- [
-  {description, "myocci"},
-  {vsn, "1"},
-  {modules, []},
-  {registered, []},
-  {applications, [
-                  kernel,
-                  stdlib
-                 ]},
-  {mod, { myocci, []}},
-  {env, []}
- ]}.
-{% endhighlight %}
-
-Ok, this is erlang boilerplate. You would go further in developing
-erlang app, you will discover the power of this bizarre pieces of
-code. For the moment, just copy'n'paste.
-
-### Step 5
 
 Create your OCCI extension file or choose existing one. XML schema is
 available
 [here](http://github.com/jeanparpaillon/occi-schemas/blob/master/xml/occi.xsd).
 
-`schemas/occi-infrastructure.xml`
+`priv/schemas/occi-infrastructure.xml`
 {% highlight xml linenos %}
 <?xml version="1.0" encoding="UTF-8"?>
 <occi:extension xmlns:occi="http://schemas.ogf.org/occi"
@@ -202,54 +165,42 @@ available
 </occi:extension>
 {% endhighlight %}
 
-### Step 5
+### Step 4
 
-Create your application main module:
+As other erlang applications, *erocci* uses a dedicated section in the
+centralized configuration file. This sections is `occi`:
 
-`src/myocci.erl`
+`erocci.config`
 {% highlight erlang linenos %}
--module(myocci).
-
--export([start/0]).
-
-start() ->
-    application:ensure_all_started(occi),
-    Ext = {extensions, {
-	     [{xml, "schemas/occi-infrastructure.xml"}],
-	     [{"http://schemas.ogf.org/occi/infrastructure#compute", "/compute/"},
-	      {"http://schemas.ogf.org/occi/infrastructure#network", "/network/"},
-	      {"http://schemas.ogf.org/occi/infrastructure#storage", "/storage/"}]
-	    }
-	  },
-    Backends = {backends,
-		[{mnesia, occi_backend_mnesia, [], "/"}]
-	       },
-    Listeners = {listeners, 
-		 [{http, occi_http, [{port, 8080}]}]
-		},
-    occi:config([Ext, Backends, Listeners]),
-    ok.
+[
+  {occi, [
+	{backends, 
+      [
+	    {backend1, occi_backend_mnesia,
+	      [{schemas, [{xml, "priv/schemas/occi-infrastructure.xml"}]}],
+		  "/"}
+	  ]
+    },
+	{listeners,
+	  [{http, occi_http, [{port, 8080}]}]}
+  ]}
+].
 {% endhighlight %}
 
-At this point, we can explain a little bit. Config is given as a list
-of `{Name, Value}` tuples (see [erlang
-proplists](http://www.erlang.org/doc/man/proplists.html)). All these
-values can be overriden at boot time with application env (see
-[erlang
-doc](http://www.erlang.org/doc/design_principles/applications.html#id74397)).
+* _Line 3_: declare backends. Backends are attached to a mountpoint,
+like filesystem.
+* _Line 5_: declare mnesia backend. The tuple contains:
+  * `backend1`: unique reference for naming the backend,
+  * `occi_backend_mnesia`: backend module name,
+  * Options: mnesia backend can read schema from the XML file declared above.
+  * `"/"`: the mountpoint on which backend is attached.
+* _Line 10_: declare listerners. As of version 0.5, available listeners are:
+  * occi_http (HTTP)
+  * occi_https (HTTPS)
+  * occi_xmpp_client (XMPP client)
+* _Line 11_: http listener takes port as option.
 
-* _Line 1_: declare the module
-* _Line 3_: declare exported functions. As an erlang application, you
-  must expose a `start/0` function.
-* _Line 6_: start the occi framework.
-* _Line 8_: declare the categories to use in your API, grouped in
-  one or several XML files, (hence the name).
-* _Line 9-11_: map categories onto paths.
-* _Line 15_: mount backend onto path. As a UNIX filesystem, you can
-  mount as many backend as you want.
-* _Line 18_: declare a listener (here an HTTP listener on port 8080).
-
-### Step 6
+### Step 5
 
 Get erlang dependancies and build:
 
@@ -258,14 +209,15 @@ rebar get-deps
 rebar compile
 {% endhighlight %}
 
-### Step 7
+### Step 6
 
-Boot your application:
+Start erocci framework with your config file:
+
 {% highlight sh %}
-erl -pa ebin -pa deps/*/ebin -s myocci
+./start.sh -c erocci.config
 {% endhighlight %}
 
-### Step 8
+### Step 7
 
 Test your application:
 {% highlight sh %}
