@@ -1,6 +1,18 @@
+*~
+/.rebar/
+/Mnesia.nonode@nohost/
+/deps/
+/doc/
+/ebin/
+/erl_crash.dump
+/include/
+/log/
+/priv/
+/scripts/
+/src/
+/test/
 _site/*
 _theme_packages/*
-*~
 
 Thumbs.db
 .DS_Store
