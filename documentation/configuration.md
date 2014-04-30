@@ -14,15 +14,6 @@ argument.
 
 ### Properties
 
-* `{extensions, {Extensions, Mapping}}`
-
-  _Extensions_ is a list of extensions to load. Right now, only `{xml,
-  Path :: string()}` is supported.
-
-  _Mapping_ is a list of `{Category :: #occi_cid{} | string(), Path ::
-  string()}`.  Categories not listed in the mapping but present in the
-  extensions are not exposed.
-
 * `{backends, [Backend :: {Ref :: atom(), Mod :: atom(), Opts :: any(), Path :: string()}]}`
 
 	* `Ref` is unique reference to the backend instance.
